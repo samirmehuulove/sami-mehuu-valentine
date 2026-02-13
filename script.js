@@ -1,174 +1,142 @@
 /* PASSWORD */
-function checkPass(){
+function checkPass() {
+  let pass = document.getElementById("pass").value;
 
-  let pass=document.getElementById("pass").value;
-
-  if(pass==="2523"){
-
+  if (pass === "2523") {
     document.getElementById("lock").classList.add("hidden");
     document.getElementById("main").classList.remove("hidden");
-
     startTyping();
-
-  }else{
-
-    document.getElementById("lockMsg").innerHTML=
-    "Wrong code 😜 Try again 💖";
-
+    startTimer();
+  } else {
+    document.getElementById("lockMsg").innerText = "❌ Wrong Code!";
   }
 }
 
+/* TYPING EFFECT */
+let text = "Hey Mehuu 💖";
+let i = 0;
 
-/* Typing Effect */
-let text="Hey Mehuu 💖";
-let i=0;
+function startTyping() {
+  let typing = document.getElementById("typing");
 
-function startTyping(){
-
-  if(i<text.length){
-    document.getElementById("typing").innerHTML+=text.charAt(i);
+  if (i < text.length) {
+    typing.innerHTML += text.charAt(i);
     i++;
-    setTimeout(startTyping,120);
+    setTimeout(startTyping, 120);
   }
 }
 
+/* NO BUTTON SHRINK */
+let noSize = 1;
 
-/* Yes No Game */
-let noSize=18, yesSize=18;
+function shrinkNo() {
+  let noBtn = document.getElementById("noBtn");
+  let yesBtn = document.getElementById("yesBtn");
+  let msg = document.getElementById("noText");
 
-function shrinkNo(){
+  noSize -= 0.1;
 
-  let no=document.getElementById("noBtn");
-  let yes=document.getElementById("yesBtn");
+  if (noSize < 0.3) {
+    msg.innerText = "Come on baby 😘 Say YES 💖";
+  } else {
+    msg.innerText = "Really? 😢 Think again...";
+  }
 
-  noSize-=2;
-  yesSize+=4;
-
-  no.style.fontSize=noSize+"px";
-  yes.style.fontSize=yesSize+"px";
-
-  document.getElementById("noText").innerHTML=
-  "Really baby? Think again 🥺💕";
-
-  if(noSize<8) no.style.display="none";
+  noBtn.style.transform = `scale(${noSize})`;
+  yesBtn.style.transform = `scale(${1 + (1 - noSize)})`;
 }
 
-
-/* Start Love */
-function startLove(){
-
+/* YES CLICK */
+function startLove() {
   document.getElementById("game1").classList.add("hidden");
   document.getElementById("final").classList.remove("hidden");
-
   startConfetti();
-  startTimer();
-  startSlideshow();
 }
 
+/* TIMER */
+let startDate = new Date("2024-01-01"); // CHANGE if needed
 
-/* Slideshow */
-let pics=["her1.jpg","her2.jpg","together.jpg"];
-let p=0;
+function startTimer() {
+  setInterval(() => {
+    let now = new Date();
+    let diff = now - startDate;
 
-function startSlideshow(){
+    let days = Math.floor(diff / (1000*60*60*24));
+    let hours = Math.floor(diff / (1000*60*60) % 24);
+    let mins = Math.floor(diff / (1000*60) % 60);
 
-  setInterval(()=>{
-
-    document.getElementById("slide").src=pics[p];
-    p=(p+1)%pics.length;
-
-  },2500);
+    document.getElementById("timer").innerText =
+      `${days} Days ${hours} Hours ${mins} Minutes ❤️`;
+  }, 1000);
 }
 
+/* SLIDESHOW */
+let pics = ["her1.jpg","her2.jpg","her3.jpg","her4.jpg"];
+let picIndex = 0;
 
-/* Timer */
-function startTimer(){
+setInterval(() => {
+  let slide = document.getElementById("slide");
 
-  let start=new Date("August 1, 2024 00:00:00").getTime();
+  if (slide) {
+    picIndex = (picIndex + 1) % pics.length;
+    slide.src = pics[picIndex];
+  }
+}, 3000);
 
-  setInterval(()=>{
+/* CONFETTI */
+function startConfetti() {
+  let canvas = document.getElementById("confetti");
+  let ctx = canvas.getContext("2d");
 
-    let now=new Date().getTime();
-    let d=now-start;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 
-    let days=Math.floor(d/(1000*60*60*24));
-    let hrs=Math.floor((d%(1000*60*60*24))/(1000*60*60));
-    let min=Math.floor((d%(1000*60*60))/(1000*60));
-    let sec=Math.floor((d%(1000*60))/1000);
+  let pieces = [];
 
-    document.getElementById("timer").innerHTML=
-    days+" Days "+hrs+"h "+min+"m "+sec+"s ❤️";
-
-  },1000);
-}
-
-
-/* Confetti */
-function startConfetti(){
-
-  let c=document.getElementById("confetti");
-  let ctx=c.getContext("2d");
-
-  c.width=window.innerWidth;
-  c.height=window.innerHeight;
-
-  let pieces=[];
-
-  for(let i=0;i<150;i++){
+  for (let i = 0; i < 150; i++) {
     pieces.push({
-      x:Math.random()*c.width,
-      y:Math.random()*c.height,
-      r:Math.random()*6+4,
-      d:Math.random()*c.height
+      x: Math.random()*canvas.width,
+      y: Math.random()*canvas.height,
+      r: Math.random()*6+2,
+      d: Math.random()*canvas.height,
+      color: `hsl(${Math.random()*360},100%,70%)`
     });
   }
 
-  function draw(){
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    ctx.clearRect(0,0,c.width,c.height);
-    ctx.fillStyle="pink";
-    ctx.beginPath();
+    pieces.forEach(p => {
+      ctx.beginPath();
+      ctx.fillStyle = p.color;
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fill();
+    });
 
-    for(let i=0;i<pieces.length;i++){
-      let p=pieces[i];
-      ctx.moveTo(p.x,p.y);
-      ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);
-    }
-
-    ctx.fill();
     update();
   }
 
-  function update(){
+  function update() {
+    pieces.forEach(p => {
+      p.y += Math.random()*3+1;
 
-    for(let i=0;i<pieces.length;i++){
-
-      let p=pieces[i];
-      p.y+=Math.cos(p.d)+2;
-
-      if(p.y>c.height){
-        pieces[i]={
-          x:Math.random()*c.width,
-          y:0,
-          r:p.r,
-          d:p.d
-        };
+      if (p.y > canvas.height) {
+        p.y = 0;
+        p.x = Math.random()*canvas.width;
       }
-    }
+    });
   }
 
-  setInterval(draw,30);
+  setInterval(draw, 20);
 }
 
-
-/* WhatsApp Share */
-function shareWhatsApp(){
-
-  let url=window.location.href;
+/* WHATSAPP SHARE */
+function shareWhatsApp() {
+  let msg = "Hey 💖 Look what Samir made for Mehuu 😘❤️";
+  let url = window.location.href;
 
   window.open(
-   "https://wa.me/?text="+
-   encodeURIComponent(
-   "Mehuu ❤️ open this surprise 😘 "+url)
+    `https://wa.me/?text=${encodeURIComponent(msg + " " + url)}`,
+    "_blank"
   );
 }
