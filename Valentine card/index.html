@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Samir ❤️ Mehuu</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- LOCK SCREEN -->
+<div id="lock" class="section">
+
+  <h1>🔐 Private Love Page</h1>
+  <p>Enter our secret code ❤️</p>
+
+  <input type="password" id="pass" placeholder="Enter code">
+  <br><br>
+
+  <button onclick="checkPass()">Unlock 💖</button>
+
+  <p id="lockMsg"></p>
+
+</div>
+
+
+<!-- MAIN SITE -->
+<div id="main" class="hidden">
+
+<audio id="bgm" autoplay loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<canvas id="confetti"></canvas>
+
+<div class="hearts"></div>
+
+<!-- GAME -->
+<div id="game1" class="section">
+
+  <h1 id="typing"></h1>
+  <h2>Will you be my Valentine? 😘</h2>
+
+  <button id="yesBtn" onclick="startLove()">YES 💘</button>
+  <button id="noBtn" onclick="shrinkNo()">NO 🙈</button>
+
+  <p id="noText"></p>
+
+</div>
+
+
+<!-- FINAL -->
+<div id="final" class="section hidden">
+
+  <h1>I Knew It 😍</h1>
+
+  <h3>We are together since:</h3>
+  <p id="timer"></p>
+
+  <div class="slideshow">
+    <img id="slide" src="her1.jpg">
+  </div>
+
+  <p class="loveMsg">
+    I love u my Mehuu ❤️  
+    u r the sweetest person always cheering me 💕  
+    thanks for all for everythings 💖  
+    I promise to be u backbone all time 💪  
+    so that u don’t need to worry for anything 🌹  
+  </p>
+
+  <button onclick="shareWhatsApp()">Share on WhatsApp 💚</button>
+
+</div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
